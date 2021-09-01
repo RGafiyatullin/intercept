@@ -1,18 +1,24 @@
+use std::os::unix::prelude::CommandExt;
 
 mod config;
+mod filter;
 
 #[ctor::ctor]
 #[no_mangle]
 fn ctor() {
-    if let Some(config) = config::load() {
+    let config = if let Some(config) = config::load() {
         eprintln!("Config found: {:#?}", config);
+        config
     } else {
-        eprintln!("No config found. Resuming normally.")
+        return;
+    };
+
+    if let Some(mut command) = filter::resolve(&config) {
+        let error = command.exec();
+        eprintln!("error executing interceptor: {:?}", error);
     }
 }
-
 
 #[ctor::ctor]
 #[no_mangle]
 fn dtor() {}
-
