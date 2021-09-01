@@ -10,3 +10,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 ctor = "^0.1"
+serde = {version = "^1", features = ["derive"]}
+serde_yaml = "^0.8"
