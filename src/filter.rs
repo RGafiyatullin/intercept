@@ -13,6 +13,7 @@ pub fn resolve(config: &Config) -> Option<Command> {
     let mut command = std::process::Command::new(interceptor.exe.as_str());
     command
         .args(interceptor.args.iter().chain(argv.iter()))
+        .env_clear()
         .envs(env.into_iter().filter(|(k, _)| k != "LD_PRELOAD"));
 
     Some(command)
