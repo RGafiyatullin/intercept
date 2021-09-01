@@ -1,9 +1,10 @@
-use std::{collections::HashMap, process::Command};
+use std::collections::HashMap;
+use std::process::Command;
 
 use crate::config::Config;
 
 pub fn resolve(config: &Config) -> Option<Command> {
-    let exe = executable();
+    let exe = executable(std::env::args().next()?);
     let argv = std::env::args().collect::<Vec<_>>();
     let env = std::env::vars().collect::<HashMap<_, _>>();
 
@@ -17,6 +18,9 @@ pub fn resolve(config: &Config) -> Option<Command> {
     Some(command)
 }
 
-fn executable() -> String {
-    unimplemented!()
+fn executable(fallback: String) -> String {
+    let proc_exe_location = format!("/proc/{}/exe", std::process::id());
+    std::fs::read_link(proc_exe_location)
+        .map(|p| p.to_string_lossy().as_ref().to_owned())
+        .unwrap_or(fallback)
 }
