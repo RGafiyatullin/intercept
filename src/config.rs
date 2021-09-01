@@ -36,7 +36,7 @@ fn maybe_load_config<P: AsRef<Path>>(path: P) -> Option<Config> {
 
 fn config_locations() -> impl IntoIterator<Item = String> {
     vec![
-        "./libaudit.config".to_owned(),
-        "/etc/libaudit.config".to_owned(),
+        "./libintercept.config".to_owned(),
+        "/etc/libintercept.config".to_owned(),
     ]
 }
