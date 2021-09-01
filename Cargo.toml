@@ -2,6 +2,8 @@
 name = "intercept"
 version = "0.1.0"
 edition = "2018"
+description = "An LD_PRELOAD library that helps averting execution of undesired programs"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib"]
