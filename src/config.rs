@@ -8,6 +8,7 @@ pub fn load() -> Option<Config> {
 
 #[derive(Debug, Clone, ::serde::Serialize, ::serde::Deserialize)]
 pub struct Config {
+    pub cookie: String,
     pub intercepted: HashMap<String, Interceptor>,
 }
 

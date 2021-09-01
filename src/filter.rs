@@ -4,6 +4,11 @@ use std::process::Command;
 use crate::config::Config;
 
 pub fn resolve(config: &Config) -> Option<Command> {
+    if std::env::var(config.cookie.as_str()).is_ok() {
+        std::env::remove_var(config.cookie.as_str());
+        return None
+    }
+
     let exe = executable(std::env::args().next()?);
     let argv = std::env::args().collect::<Vec<_>>();
     let env = std::env::vars().collect::<HashMap<_, _>>();
@@ -14,6 +19,7 @@ pub fn resolve(config: &Config) -> Option<Command> {
     command
         .args(interceptor.args.iter().chain(argv.iter()))
         .env_clear()
+        .env(config.cookie.as_str(), "1")
         .envs(env.into_iter().filter(|(k, _)| k != "LD_PRELOAD"));
 
     Some(command)
