@@ -4,8 +4,9 @@ use std::process::Command;
 use crate::config::Config;
 
 pub fn resolve(config: &Config) -> Option<Command> {
-    if std::env::var(config.cookie.as_str()).is_ok() {
-        std::env::remove_var(config.cookie.as_str());
+    let this_pid = std::process::id().to_string();
+
+    if std::env::var(config.cookie.as_str()).ok().as_ref() == Some(&this_pid) {
         return None
     }
 
@@ -19,7 +20,7 @@ pub fn resolve(config: &Config) -> Option<Command> {
     command
         .args(interceptor.args.iter().chain(argv.iter()))
         .env_clear()
-        .env(config.cookie.as_str(), "1")
+        .env(config.cookie.as_str(), this_pid)
         .envs(env.into_iter().filter(|(k, _)| k != "LD_PRELOAD"));
 
     Some(command)
