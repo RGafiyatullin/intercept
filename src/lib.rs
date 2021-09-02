@@ -1,5 +1,3 @@
-use std::os::unix::prelude::CommandExt;
-
 mod config;
 mod filter;
 
@@ -14,10 +12,7 @@ fn ctor() {
         return;
     };
 
-    if let Some(mut command) = filter::resolve(&config) {
-        let error = command.exec();
-        eprintln!("error executing interceptor: {:?}", error);
-    }
+    let _ = filter::dispatch(&config);
 }
 
 #[ctor::ctor]

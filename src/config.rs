@@ -13,7 +13,21 @@ pub struct Config {
 }
 
 #[derive(Debug, Clone, ::serde::Serialize, ::serde::Deserialize)]
-pub struct Interceptor {
+pub enum Interceptor {
+    Replace(Replace),
+    Report(Report),
+}
+
+#[derive(Debug, Clone, ::serde::Serialize, ::serde::Deserialize)]
+pub struct Replace {
+    pub exe: String,
+
+    #[serde(default = "Default::default")]
+    pub args: Vec<String>,
+}
+
+#[derive(Debug, Clone, ::serde::Serialize, ::serde::Deserialize)]
+pub struct Report {
     pub exe: String,
 
     #[serde(default = "Default::default")]
